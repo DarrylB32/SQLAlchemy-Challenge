@@ -1,24 +1,22 @@
+# Dependecies and setup
 import numpy as np
-
 import sqlalchemy
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import Session
 from sqlalchemy import create_engine, func
-
 from flask import Flask, jsonify
-
 
 #################################################
 # Database Setup
 #################################################
 engine = create_engine("sqlite:///Resources/hawaii.sqlite")
 
-# reflect an existing database into a new model
+# reflects an existing database into a new model
 Base = automap_base()
-# reflect the tables
+# reflects the tables
 Base.prepare(engine, reflect=True)
 
-# Save reference to the table
+# Saves reference to the table
 Measurement=Base.classes.measurement
 Station=Base.classes.station
 
@@ -32,7 +30,7 @@ Climate_App = Flask(__name__)
 # Flask Routes
 #################################################
 
-
+#List of pathways for app
 app_index = {"Precipitation": "/api/v1.0/precipitation",
             "Stations":"/api/v1.0/stations",
             "Temperature Observervations":"/api/v1.0/tobs",
@@ -48,16 +46,16 @@ def home():
 
 @Climate_App.route("/api/v1.0/precipitation")
 def precipitation():
-        # Create our session (link) from Python to the DB
+     # Creates a session (link) from Python to the DB
     session = Session(engine)
 
 
-    # Query all precipitation data
+    # Queries all precipitation data
     results = session.query(Measurement.date, Measurement.prcp).all()
 
     session.close()
 
-    # Create a dictionary from the row data and append to a list of precipitation
+    # Creates a dictionary from the row data and appends to a list of precipitation
     date_prcp = []
     for date, prcp in results:
         date_prcp_dict = {}
@@ -72,12 +70,12 @@ def stations():
     session = Session(engine)
 
 
-    # Query all precipitation data
+    # Query all stations names
     results = session.query(Station.station, Station.name).all()
 
     session.close()
 
-    # Create a dictionary from the row data and append to a list of precipitation
+    # Creates a dictionary from the row data and appends to a list of stations
     stations = []
     for station, name in results:
         station_dict = {}
@@ -91,12 +89,12 @@ def tobs1s():
     session = Session(engine)
 
 
-    # Query all precipitation data
+    # Queries all temperature data
     results = session.query(Measurement.station, Measurement.tobs).filter((Measurement.station=="USC00519281"),(Measurement.date>='2016-08-23')).all()
 
     session.close()
 
-    # Create a dictionary from the row data and append to a list of precipitation
+    # Creates a dictionary from the row data and appends to a list of temperatures
     station_temp = []
     for station, tobs in results:
         station_temp_dict = {}
@@ -110,12 +108,12 @@ def start_date(start):
     session = Session(engine)
 
 
-    # Query all precipitation data
+    # Queries all temperature data
     results = session.query(Measurement.date, func.max(Measurement.tobs), func.avg(Measurement.tobs), func.min(Measurement.tobs)).filter(Measurement.date>= start).group_by(Measurement.date).all()
 
     session.close()
 
-    # Create a dictionary from the row data and append to a list of precipitation
+    # Creates a dictionary for the date, max temp, min temp, and average temp starting on the input <start> date 
     start_temp = []
     for date, maximum, average, minimum in results:
         start_temp_dict = {}
@@ -133,12 +131,12 @@ def start_end_date(start, end):
     session = Session(engine)
 
 
-    # Query all precipitation data
+    # Query all temperature data
     results = session.query(Measurement.date, func.max(Measurement.tobs), func.avg(Measurement.tobs), func.min(Measurement.tobs)).filter((Measurement.date>= start), (Measurement.date<=end)).group_by(Measurement.date).all()
 
     session.close()
 
-    # Create a dictionary from the row data and append to a list of precipitation
+    # Creates a dictionary for the date, max temp, min temp, and average temp ranging from the input <start> date the the <end> date
     start_end_temp = []
     for date, maximum, average, minimum in results:
         start_end_temp_dict = {}

@@ -45,7 +45,7 @@ After completion of initial climate analysis, I designed a Flask API based on th
 * Jupyter Notebook
 
 ### User Instructions
- * Clone the repository: git clone https://github.com/DarrylB32/SQLAlchemy-Climate_and_Weather_Analysis 
+ * Clone the repository: git clone https://github.com/DarrylB32/SQLAlchemy-Climate_and_Weather_Analysis.git 
  * Using terminal, navigate to the folder that has the **Climate_App.py** file and input:
 	* python Climate_App.py
  * Copy and paste the URL link into your browser
